@@ -64,49 +64,54 @@ function App() {
       return 'handled';
     }
 
-    if (text.endsWith('*') && chars === ' ') {
-      const newContentState = Modifier.applyInlineStyle(
-        currentContent,
-        selectionState.merge({
-          anchorOffset: selectionState.getAnchorOffset() - 1,
-          focusOffset: selectionState.getFocusOffset(),
-        }),
-        'BOLD'
-      );
-
-      handleEditorChange(EditorState.push(editorState, newContentState, 'apply-inline-style'));
-      return 'handled';
+    if (chars === ' ') {
+      const starCount = text.match(/\*{1,3}$/)[0].length;
+  
+      if (starCount === 1) {
+        const newContentState = Modifier.applyInlineStyle(
+          currentContent,
+          selectionState.merge({
+            anchorOffset: selectionState.getAnchorOffset() - 1,
+            focusOffset: selectionState.getFocusOffset(),
+          }),
+          'BOLD'
+        );
+  
+        handleEditorChange(EditorState.push(editorState, newContentState, 'apply-inline-style'));
+        return 'handled';
+      }
+  
+      if (starCount === 2) {
+        const newContentState = Modifier.applyInlineStyle(
+          currentContent,
+          selectionState.merge({
+            anchorOffset: selectionState.getAnchorOffset() - 2,
+            focusOffset: selectionState.getFocusOffset(),
+          }),
+          'RED_FONT_COLOR'
+        );
+  
+        handleEditorChange(EditorState.push(editorState, newContentState, 'apply-inline-style'));
+        return 'handled';
+      }
+  
+      if (starCount === 3) {
+        const newContentState = Modifier.applyInlineStyle(
+          currentContent,
+          selectionState.merge({
+            anchorOffset: selectionState.getAnchorOffset() - 3,
+            focusOffset: selectionState.getFocusOffset(),
+          }),
+          'UNDERLINE'
+        );
+  
+        handleEditorChange(EditorState.push(editorState, newContentState, 'apply-inline-style'));
+        return 'handled';
+      }
     }
-
-    if (text.endsWith('**') && chars === ' ') {
-      const newContentState = Modifier.applyInlineStyle(
-        currentContent,
-        selectionState.merge({
-          anchorOffset: selectionState.getAnchorOffset() - 2,
-          focusOffset: selectionState.getFocusOffset(),
-        }),
-        'RED_FONT_COLOR'
-      );
-
-      handleEditorChange(EditorState.push(editorState, newContentState, 'apply-inline-style'));
-      return 'handled';
-    }
-
-    if (text.endsWith('***') && chars === ' ') {
-      const newContentState = Modifier.applyInlineStyle(
-        currentContent,
-        selectionState.merge({
-          anchorOffset: selectionState.getAnchorOffset() - 3,
-          focusOffset: selectionState.getFocusOffset(),
-        }),
-        'UNDERLINE'
-      );
-
-      handleEditorChange(EditorState.push(editorState, newContentState, 'apply-inline-style'));
-      return 'handled';
-    }
-
+  
     return 'not-handled';
+  
   };
 
   return (
